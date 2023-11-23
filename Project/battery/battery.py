@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import psutil
 
 
@@ -9,6 +11,10 @@ class Battery:
         self.time_left = ''
 
         self.get_battery()
+
+    def update_data(self):
+        self.get_battery()
+        self.get_time_left()
 
     def get_battery(self):
         try:
@@ -34,24 +40,20 @@ class Battery:
         else:
             return 'Нет информации о батарее'
 
-    def calculate_time_left(self, seconds_left):
-        if seconds_left is not None:
-            hours, remainder = divmod(seconds_left, 3600)
-            minutes, seconds = divmod(remainder, 60)
-
-            self.time_left = f'{int(hours)}:{int(minutes)}:{int(seconds)}'
-            return self.time_left
-        else:
-            return 'Недоступно'
-
     def get_time_left(self):
         power = self.get_power_plugged()
         if self.battery is not None:
             if not power:
-                seconds_left = self.battery.secsleft
-                self.time_left = self.calculate_time_left(seconds_left)
+                time_left = timedelta(seconds=self.battery.secsleft) if self.battery.secsleft is not None else None
 
-                return self.time_left
+                if time_left is not None:
+                    hours, remainder = divmod(time_left.seconds, 3600)
+                    minutes, seconds = divmod(remainder, 60)
+
+                    self.time_left = f'{int(hours)}:{int(minutes)}:{int(seconds)}'
+                    return self.time_left
+                else:
+                    return 'Недоступно'
             else:
                 return 'Устройство подключено к сети'
         else:

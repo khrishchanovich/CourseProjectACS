@@ -12,6 +12,9 @@ class RAM:
 
         self.get_memory()
 
+    def update_data(self):
+        self.get_memory()
+
     def get_memory(self):
         self.memory = psutil.virtual_memory()
 
@@ -36,3 +39,7 @@ class RAM:
         print(f'Загрузка оперативной памяти: {self.get_memory_percent()}%')
         print(f'Доступно: {self.get_available_memory()}')
         print(f'Общее: {self.get_total_memory()}')
+
+
+# ram = RAM()
+# ram.display_info()

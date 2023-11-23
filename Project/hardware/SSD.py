@@ -4,27 +4,21 @@ import psutil
 
 
 class SSD:
-    def __init__(self):
+    def __init__(self, partition):
+        self.partition = partition
         self.partitions = None
         self.disk_usage = None
         self.disk_percent = 0
         self.available_space = 'N/A'
         self.total_space = 'N/A'
 
-        self.get_partitions()
         self.get_disk()
 
-    def get_partitions(self):
-        self.partitions = psutil.disk_partitions()
-
-        return self.partitions
-
     def get_disk(self):
-        for partition in self.partitions:
-            if 'Windows' in partition.fstype:
-                continue
+        if 'Windows' in self.partition.fstype:
+            return
 
-            self.disk_usage = psutil.disk_usage(partition.mountpoint)
+        self.disk_usage = psutil.disk_usage(self.partition.mountpoint)
 
         return self.disk_usage
 
@@ -44,11 +38,17 @@ class SSD:
         return self.total_space
 
     def display_info(self):
+        print(f'Диск {self.partition.device}:')
         print(f'Загрузка жесткого диска: {self.get_percent()}%')
         print(f'Доступно: {self.get_available_space()}')
         print(f'Общее: {self.get_total_space()}')
+        print()
 
 
-disk_info = SSD()
-
-disk_info.display_info()
+# # Получаем информацию о всех дисках
+# partitions = psutil.disk_partitions()
+#
+# # Создаем экземпляр класса SSD для каждого диска
+# for partition in partitions:
+#     disk_info = SSD(partition)
+#     disk_info.display_info()
