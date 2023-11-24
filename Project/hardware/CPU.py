@@ -2,7 +2,6 @@
 
 import platform
 import psutil
-import multiprocessing
 import wmi
 
 
@@ -47,7 +46,7 @@ class CPU:
             return 'Информация не доступна'
 
     def get_num_active_cores(self):
-        self.num_active_cores = multiprocessing.cpu_count()
+        self.num_active_cores = psutil.cpu_count(logical=True)
         if self.num_active_cores:
             return self.num_active_cores
         else:
@@ -104,5 +103,5 @@ class CPU:
         print(f'Напряжения: {self.get_power()}')
 
 
-# cpu = CPU()
-# cpu.display_info()
+cpu = CPU()
+cpu.display_info()

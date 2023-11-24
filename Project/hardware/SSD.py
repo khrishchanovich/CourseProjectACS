@@ -6,7 +6,6 @@ import psutil
 class SSD:
     def __init__(self, partition):
         self.partition = partition
-        self.partitions = None
         self.disk_usage = None
         self.disk_percent = 0
         self.available_space = 'N/A'
@@ -20,7 +19,8 @@ class SSD:
 
         self.disk_usage = psutil.disk_usage(self.partition.mountpoint)
 
-        return self.disk_usage
+    def get_name(self):
+        return self.partition.device
 
     def get_percent(self):
         self.disk_percent = self.disk_usage.percent
