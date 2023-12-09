@@ -52,3 +52,4 @@ class SSD:
 # for partition in partitions:
 #     disk_info = SSD(partition)
 #     disk_info.display_info()
+
